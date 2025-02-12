@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Corazones</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #ffe6f2;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
+            top: 0;
+        }
+        
+        #player {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background: url('https://cdn-icons-png.flaticon.com/512/3456/3456379.png') no-repeat center/contain;
+            transform: translateX(-50%);
+        }
+        
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            color: #d6336c;
+            font-weight: bold;
+        }
+        
+        #letter {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: white;
+            padding: 40px;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        #letter.show {
+            display: block;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        #letter h2 {
+            color: #d6336c;
+            font-size: 24px;
+        }
+        
+        #letter p {
+            font-size: 18px;
+            color: #333;
+        }
+        
+        #catAnimation {
+            margin-top: 20px;
+        }
+        
+        #catAnimation img {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="score">Puntuación: 0</div>
+        <div id="player"></div>
+        <div id="letter">
+            <h2>CARTA PARA UNA NIÑA MUY COQUETA</h2>
+            <p>Holaaa Valecita guapaaa :), ojalá te haya gustado atrapar 10 corazones JAJAJAJAJAJAJAJAJA si lees esto entonces estuvo fácil eeeeehhhhhh.<br><br>
+            Coqueta, quiero que sepas que te hice este detalle con todo mi corazón y con todo todo todo todo todoooo mi cariño. ❤️<br><br>
+            Te haría una carta del tamaño de un libro tlj, mucho más grande que la biblia JAJAJAJAJA y tal vez en persona no exprese lo mucho que te quiero, pero eres una niña increíblemente fascinante y me gustas mucho pero de verdad mucho, no mides cuanto te he tomado cariño mi bombón.<br><br>
+            Así que, aunque el 14 no podamos salir, te quiero decir que si ¿quieres ser "Mi San Valentín"? como dicen los chavos. El dia 15 de febrero de 2025, y si no puedes ese día, no importa, te voy a esperar...soy muy paciente cuando quiero algo que me interesa eh JAJAJAJAJAJAJAJAJAJA <br><br>
+            La hora por confirmarse está, pero ya quedamos que a Hudson :)<br><br>
+            Y por último mi Vale bonita, necesito que sepas que aunque no seamos novios (me gustaría mucho por cierto) quiero quedarme mucho tiempo junto a ti niña, y voy a hacer todo lo posible para que así sea, te quiero mucho mi niña coqueta y espero tu respuesta atentamente. Y muy feliz feliz cumpleaños adelantado jaja mi reina, que la pases increíble bombónsote :)</p>
+            <div id="catAnimation">
+                <img src="https://media.tenor.com/MmXCy1N6GvgAAAAi/kiss.gif" alt="Gatito besando">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let score = 0;
+        const player = document.getElementById("player");
+        const scoreDisplay = document.getElementById("score");
+        const letter = document.getElementById("letter");
+        
+        document.addEventListener("mousemove", (e) => {
+            let x = e.clientX - player.offsetWidth / 2;
+            player.style.left = `${x}px`;
+        });
+        
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.style.left = Math.random() * window.innerWidth + "px";
+            heart.style.top = "0px";
+            document.body.appendChild(heart);
+            
+            let fallInterval = setInterval(() => {
+                let heartTop = parseInt(heart.style.top);
+                let playerLeft = player.offsetLeft;
+                let playerRight = playerLeft + player.offsetWidth;
+                let heartLeft = heart.offsetLeft;
+                let heartRight = heartLeft + heart.offsetWidth;
+                
+                if (heartTop > window.innerHeight - 100 && heartTop < window.innerHeight - 50 && 
+                    heartRight > playerLeft && heartLeft < playerRight) {
+                    score++;
+                    scoreDisplay.textContent = `Puntuación: ${score}`;
+                    heart.remove();
+                    clearInterval(fallInterval);
+                    if (score === 10) {
+                        showLetter();
+                    }
+                } else if (heartTop > window.innerHeight) {
+                    heart.remove();
+                    clearInterval(fallInterval);
+                } else {
+                    heart.style.top = heartTop + 5 + "px";
+                }
+            }, 50);
+        }
+        
+        function showLetter() {
+            letter.classList.add("show");
+        }
+        
+        setInterval(createHeart, 1000);
+    </script>
+</body>
+</html>
